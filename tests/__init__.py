@@ -1,6 +1,5 @@
 import sys
 import os
-import unittest
 
 __author__ = 'ekampf'
 

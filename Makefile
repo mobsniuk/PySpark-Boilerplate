@@ -41,10 +41,10 @@ dev_deps: .venv
 
 lint:
 	. .venv/bin/activate && pylint -r n src/main.py src/shared src/jobs tests
-
-analyse:
 	. .venv/bin/activate &&  flake8 src/jobs/ --ignore=E501
 	. .venv/bin/activate &&  flake8 src/main.py --ignore=E501
+	. .venv/bin/activate &&  flake8 src/shared --ignore=E501
+	. .venv/bin/activate &&  flake8 tests --ignore=E501
 
 test:
 	. .venv/bin/activate && nosetests ./tests/* --config=.noserc

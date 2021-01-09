@@ -2,6 +2,7 @@ from mock import patch
 from pysparkling import Context
 from jobs.wordcount import analyze
 
+
 @patch('jobs.wordcount.WordCountJobContext.initalize_counter')
 @patch('jobs.wordcount.WordCountJobContext.inc_counter')
 def test_wordcount_analyze(_, __):
