@@ -1,11 +1,12 @@
 
 help:
 	@echo "clean - remove all build, test, coverage and Python artifacts"
+	@echo "clean-build - remove build"
+	@echo "clean-env - remove python environment"
 	@echo "clean-pyc - remove Python file artifacts"
 	@echo "clean-test - remove test and coverage artifacts"
 	@echo "lint - check style"
 	@echo "test - run tests quickly with the default Python"
-	@echo "coverage - check code coverage quickly with the default Python"
 	@echo "build - package"
 
 all: default
@@ -20,6 +21,9 @@ clean: clean-build clean-pyc clean-test
 clean-build:
 	rm -fr dist/
 
+clean-env:
+	rm -fr .venv
+
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
@@ -27,9 +31,7 @@ clean-pyc:
 	find . -name '__pycache__' -exec rm -fr {} +
 
 clean-test:
-	rm -fr .tox/
-	rm -f .coverage
-	rm -fr htmlcov/
+	rm -f nosetests.xml
 
 deps: .venv
 	. .venv/bin/activate && pip install -U -r requirements.txt -t ./src/libs

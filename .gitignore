@@ -66,6 +66,12 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
+#VCode
+.vscode
+
 # PyCharm and VirtualEnv
 .idea
 .venv
+
+#OS X
+.DS_Store
