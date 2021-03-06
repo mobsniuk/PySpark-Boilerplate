@@ -5,10 +5,6 @@ import time
 import os
 import sys
 
-if os.path.exists('libs.zip'):
-    sys.path.insert(0, 'libs.zip')
-else:
-    sys.path.insert(0, './libs')
 
 if os.path.exists('jobs.zip'):
     sys.path.insert(0, 'jobs.zip')
@@ -22,8 +18,6 @@ except Exception:
     import findspark
     findspark.init()
     import pyspark
-
-__author__ = 'ekampf'
 
 
 if __name__ == '__main__':

@@ -71,7 +71,7 @@ target/
 
 # PyCharm and VirtualEnv
 .idea
-.venv
+venv
 
 #OS X
 .DS_Store

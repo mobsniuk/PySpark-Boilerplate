@@ -11,10 +11,10 @@ help:
 
 all: default
 
-default: clean dev_deps deps test lint build
+default: clean deps dev_deps test lint build
 
 .venv:
-	if [ ! -e ".venv/bin/activate_this.py" ] ; then virtualenv --clear .venv ; fi
+	if [ ! -e "venv/bin/activate_this.py" ] ; then python3 -m venv --copies venv ; fi
 
 clean: clean-build clean-pyc clean-test
 
@@ -22,7 +22,7 @@ clean-build:
 	rm -fr dist/
 
 clean-env:
-	rm -fr .venv
+	rm -fr venv
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -34,23 +34,23 @@ clean-test:
 	rm -f nosetests.xml
 
 deps: .venv
-	. .venv/bin/activate && pip install -U -r requirements.txt -t ./src/libs
+	. venv/bin/activate && pip install -U -r requirements.txt
 
 dev_deps: .venv
-	. .venv/bin/activate && pip install -U -r dev_requirements.txt
+	. venv/bin/activate && pip install -U -r dev_requirements.txt
 
 lint:
-	. .venv/bin/activate && pylint -r n src/main.py src/shared src/jobs tests
-	. .venv/bin/activate &&  flake8 src/jobs/ --ignore=E501
-	. .venv/bin/activate &&  flake8 src/main.py --ignore=E501
-	. .venv/bin/activate &&  flake8 src/shared --ignore=E501
-	. .venv/bin/activate &&  flake8 tests --ignore=E501
+	. venv/bin/activate && pylint -r n src/main.py src/shared src/jobs tests
+	. venv/bin/activate &&  flake8 src/jobs/ --ignore=E501
+	. venv/bin/activate &&  flake8 src/main.py --ignore=E501
+	. venv/bin/activate &&  flake8 src/shared --ignore=E501
+	. venv/bin/activate &&  flake8 tests --ignore=E501
 
 test:
-	. .venv/bin/activate && nosetests ./tests/* --config=.noserc
+	. venv/bin/activate && nosetests ./tests/* --config=.noserc
 
 build: clean
 	mkdir ./dist
 	cp ./src/main.py ./dist
 	cd ./src && zip -x main.py -x \*libs\* -r ../dist/jobs.zip .
-	cd ./src/libs && zip -r ../../dist/libs.zip .
+	cd venv && tar -hczf ../dist/venv.tar.gz *
