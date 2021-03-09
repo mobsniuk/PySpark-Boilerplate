@@ -1,29 +1,26 @@
-#!/usr/bin/python
 import argparse
 import importlib
 import time
 import os
 import sys
 
+from pyspark.sql import SparkSession  # pylint: disable=E0401
 
 if os.path.exists('jobs.zip'):
     sys.path.insert(0, 'jobs.zip')
 else:
     sys.path.insert(0, './jobs')
 
-# pylint:disable=E0401
-try:
-    import pyspark
-except Exception:
-    import findspark
-    findspark.init()
-    import pyspark
-
-
 if __name__ == '__main__':
+
+    paths = '\n'.join(sys.path)
+    print(paths)
+
     parser = argparse.ArgumentParser(description='Run a PySpark job')
-    parser.add_argument('--job', type=str, required=True, dest='job_name', help="The name of the job module you want to run. (ex: poc will run job on jobs.poc package)")
-    parser.add_argument('--job-args', nargs='*', help="Extra arguments to send to the PySpark job (example: --job-args template=manual-email1 foo=bar")
+    parser.add_argument('--job', type=str, required=True, dest='job_name',
+                        help="The name of the job module you want to run. (ex: poc will run job on jobs.poc package)")
+    parser.add_argument('--job-args', nargs='*',
+                        help="Extra arguments to send to the PySpark job (example: --job-args template=manual-email1 foo=bar")
 
     args = parser.parse_args()
     print("Called with arguments: %s" % args)
@@ -42,11 +39,13 @@ if __name__ == '__main__':
           % (args.job_name, environment))
 
     os.environ.update(environment)
-    sc = pyspark.SparkContext(appName=args.job_name, environment=environment)
+
+    spark = (SparkSession.builder.appName(args.job_name).enableHiveSupport().getOrCreate())
+
     job_module = importlib.import_module('jobs.%s' % args.job_name)
 
     start = time.time()
-    job_module.analyze(sc, **job_args)
+    job_module.analyze(spark, **job_args)
     end = time.time()
 
     print("\nExecution of job %s took %s seconds" % (args.job_name, end - start))
